@@ -1,0 +1,34 @@
+name: Package SanctuaryComms
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build and upload package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python (for make compatibility)
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make git
+
+      - name: Build ZIP package
+        run: make
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SanctuaryComms-package
+          path: SanctuaryComms-*.zip
