@@ -5,7 +5,6 @@ on:
     # Trigger on tag pushes matching v* (e.g. v0.1.0)
     tags:
       - "v*"
-  workflow_dispatch:
 
 jobs:
   release:
@@ -24,9 +23,14 @@ jobs:
           sudo apt-get install -y zip
 
       - name: Build zip package
-        run: make
-        env:
-          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          echo "Building zip for tag ${TAG}"
+          zip -r "SanctuaryComms-${TAG}.zip" \
+            README.md \
+            SanctuaryComms.toc \
+            SanctuaryComms.lua \
+            SanctuaryComms.xml
 
       - name: Create GitHub Release
         id: create_release
@@ -34,8 +38,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag_name: ${{ github.ref_name }}      # v1.0.0
-          release_name: ${{ github.ref_name }}  # v1.0.0
+          tag_name: ${{ github.ref_name }}       # v0.1.0
+          release_name: ${{ github.ref_name }}   # v0.1.0
           draft: false
           prerelease: false
 
