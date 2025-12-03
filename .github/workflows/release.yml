@@ -4,7 +4,7 @@ on:
   push:
     # Trigger on tag pushes matching v* (e.g. v0.1.0)
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   release:
@@ -37,3 +37,4 @@ jobs:
           asset_path: SanctuaryComms-${{ github.ref_name }}.zip
           asset_name: SanctuaryComms-${{ github.ref_name }}.zip
           asset_content_type: application/zip
+
