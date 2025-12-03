@@ -3,14 +3,15 @@ name: Release
 on:
   push:
     tags:
-      - "v*"          # v0.1.0, v0.1.0-alpha, etc
+      - "v*"          # trigger on tags like v0.1.0, v0.1.0-alpha
+  workflow_dispatch:
 
 jobs:
   release:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write   # required for creating releases
+      contents: write   # required so gh or API can create releases
 
     steps:
       - name: Check out code
@@ -24,7 +25,7 @@ jobs:
       - name: Build zip package
         run: |
           TAG="${GITHUB_REF_NAME}"
-          echo "Tag is ${TAG}"
+          echo "Building SanctuaryComms-${TAG}.zip"
           zip -r "SanctuaryComms-${TAG}.zip" \
             README.md \
             SanctuaryComms.toc \
@@ -33,7 +34,7 @@ jobs:
 
       - name: Create GitHub release with gh
         env:
-          GITHUB_TOKEN: ${{ github.token }}   # gh will pick this up
+          GITHUB_TOKEN: ${{ github.token }}   # built in token, do not override with a secret of same name
         run: |
           TAG="${GITHUB_REF_NAME}"
           ls -l
