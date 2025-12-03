@@ -2,9 +2,9 @@ name: Release
 
 on:
   push:
-    # Trigger on tag pushes matching v* (e.g. v0.1.0)
     tags:
       - "v*"
+  workflow_dispatch:
 
 jobs:
   release:
@@ -25,7 +25,6 @@ jobs:
       - name: Build zip package
         run: |
           TAG="${GITHUB_REF_NAME}"
-          echo "Building zip for tag ${TAG}"
           zip -r "SanctuaryComms-${TAG}.zip" \
             README.md \
             SanctuaryComms.toc \
@@ -38,10 +37,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          tag_name: ${{ github.ref_name }}       # v0.1.0
-          release_name: ${{ github.ref_name }}   # v0.1.0
+          tag_name: ${{ github.ref_name }}        # v0.1.0-alpha
+          release_name: ${{ github.ref_name }}
           draft: false
-          prerelease: false
+          prerelease: true
 
       - name: Upload release asset
         uses: actions/upload-release-asset@v1
