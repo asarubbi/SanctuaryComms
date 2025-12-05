@@ -61,6 +61,9 @@ jobs:
     permissions:
       contents: write # Needed to create releases
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Download all addon zips
         uses: actions/download-artifact@v4
         with:
