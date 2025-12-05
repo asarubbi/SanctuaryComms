@@ -36,9 +36,9 @@ jobs:
 
       - name: Copy addon files
         run: |
-          cp -r sanctuarycomms/*.lua release/${{ env.ADDON_NAME }}/
-          cp -r sanctuarycomms/libs release/${{ env.ADDON_NAME }}/
-          cp sanctuarycomms/${{ env.TOC_FILE }} release/${{ env.ADDON_NAME }}/${{ env.ADDON_NAME }}.toc
+          cp ./*.lua release/${{ env.ADDON_NAME }}/
+          cp -r ./libs release/${{ env.ADDON_NAME }}/
+          cp ./${{ env.TOC_FILE }} release/${{ env.ADDON_NAME }}/${{ env.ADDON_NAME }}.toc
 
       - name: Create zip archive
         id: zip
