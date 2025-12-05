@@ -1,0 +1,77 @@
+name: Create Addon Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Package for ${{ matrix.wow_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        wow_version: [Retail, Classic, Ascension]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get Addon Name
+        id: get_addon_name
+        run: echo "ADDON_NAME=SanctuaryComms" >> $GITHUB_ENV
+
+      - name: Set TOC file for version
+        id: set_toc
+        run: |
+          if [ "${{ matrix.wow_version }}" == "Retail" ]; then
+            echo "TOC_FILE=${{ env.ADDON_NAME }}.toc" >> $GITHUB_ENV
+          elif [ "${{ matrix.wow_version }}" == "Classic" ]; then
+            echo "TOC_FILE=${{ env.ADDON_NAME }}_Classic.toc" >> $GITHUB_ENV
+          elif [ "${{ matrix.wow_version }}" == "Ascension" ]; then
+            echo "TOC_FILE=${{ env.ADDON_NAME }}_Ascension.toc" >> $GITHUB_ENV
+          fi
+
+      - name: Create packaging directory
+        run: mkdir -p release/${{ env.ADDON_NAME }}
+
+      - name: Copy addon files
+        run: |
+          cp -r sanctuarycomms/*.lua release/${{ env.ADDON_NAME }}/
+          cp -r sanctuarycomms/libs release/${{ env.ADDON_NAME }}/
+          cp sanctuarycomms/${{ env.TOC_FILE }} release/${{ env.ADDON_NAME }}/${{ env.ADDON_NAME }}.toc
+
+      - name: Create zip archive
+        id: zip
+        run: |
+          cd release
+          zip -r ../${{ env.ADDON_NAME }}-${{ matrix.wow_version }}.zip ${{ env.ADDON_NAME }}
+          cd ..
+          echo "ZIP_NAME=${{ env.ADDON_NAME }}-${{ matrix.wow_version }}.zip" >> $GITHUB_ENV
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: addon-zips
+          path: ${{ env.ZIP_NAME }}
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to create releases
+    steps:
+      - name: Download all addon zips
+        uses: actions/download-artifact@v4
+        with:
+          name: addon-zips
+          path: release-assets
+
+      - name: Create Release and Upload Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ github.ref }} \
+            --title "Release ${{ github.ref }}" \
+            --notes "Automated release for ${{ github.ref }}" \
+            release-assets/*.zip
