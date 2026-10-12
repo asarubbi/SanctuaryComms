@@ -1,0 +1,7 @@
+## Interface: 50502
+## Title: SanctuaryComms
+## Notes: Firewall-style chat filter replacement
+## Version: 0.1.0
+## Author: asarubbi
+## SavedVariables: SanctuaryCommsDB
+SanctuaryComms.lua
