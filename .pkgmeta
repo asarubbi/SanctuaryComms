@@ -1,0 +1,7 @@
+package-as: SanctuaryComms
+
+ignore:
+  - .github
+  - .pkgmeta
+  - package.sh
+  - GEMINI.md
