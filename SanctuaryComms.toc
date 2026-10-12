@@ -1,4 +1,4 @@
-## Interface: @retail-interface-version@
+## Interface: @interface-version@
 ## Title: SanctuaryComms
 ## Notes: Filters unwanted chat messages.
 ## Author: PapaLegba (ASarubbi)
