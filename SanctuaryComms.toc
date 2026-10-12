@@ -2,7 +2,7 @@
 ## Title: SanctuaryComms
 ## Notes: Filters unwanted chat messages.
 ## Author: PapaLegba (ASarubbi)
-## Version: 1.0.0
+## Version: 1.0.5
 ## SavedVariables: SanctuaryCommsDB
 ## OptionalDeps: Ace3
 
