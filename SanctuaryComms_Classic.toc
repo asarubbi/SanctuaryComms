@@ -1,4 +1,4 @@
-## Interface: @interface-version@
+## Interface: 50502
 ## Title: SanctuaryComms
 ## Notes: Filters unwanted chat messages.
 ## Author: PapaLegba (ASarubbi)
