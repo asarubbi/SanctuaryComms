@@ -17,6 +17,15 @@ AceConfigDialog.Status = AceConfigDialog.Status or {}
 AceConfigDialog.frame = AceConfigDialog.frame or CreateFrame("Frame")
 AceConfigDialog.tooltip = AceConfigDialog.tooltip or CreateFrame("GameTooltip", "AceConfigDialogTooltip", UIParent, "GameTooltipTemplate")
 
+-- Vanilla 1.x GameTooltip:SetText/AddLine do not accept the wrap argument
+if select(4, GetBuildInfo()) < 20000 then
+	local tt = AceConfigDialog.tooltip
+	local origSetText = tt.SetText
+	tt.SetText = function(self, text, r, g, b, ...) return origSetText(self, text, r, g, b) end
+	local origAddLine = tt.AddLine
+	tt.AddLine = function(self, text, r, g, b, ...) return origAddLine(self, text, r, g, b) end
+end
+
 AceConfigDialog.frame.apps = AceConfigDialog.frame.apps or {}
 AceConfigDialog.frame.closing = AceConfigDialog.frame.closing or {}
 AceConfigDialog.frame.closeAllOverride = AceConfigDialog.frame.closeAllOverride or {}
